@@ -22,4 +22,3 @@ dependencyResolutionManagement {
 rootProject.name = "DrinkwaterReminder"
 include(":app")
 include(":sample")
-include(":sample2")
