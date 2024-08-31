@@ -41,15 +41,6 @@ class UsersVM @Inject constructor(private val usersRepoImpl: UsersRepositoryImpl
         }
     }
 
-    init {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            repeat(30) {
-//                delay(1000L)
-//                counter.emit(it)
-//            }
-//        }
-    }
-
     fun storeUser(user: User) {
         UserStore.storeUser(user)
     }

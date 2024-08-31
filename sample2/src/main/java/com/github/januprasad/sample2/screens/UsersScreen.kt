@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun UsersScreen(
-    viewModel: UsersVM = viewModel(),
+    viewModel: UsersVM,
     navigateDetailsScreen: (User) -> Unit
 ) {
 
@@ -46,7 +46,11 @@ fun UsersScreen(
 
     when (appState) {
         is AppState.Init -> {}
-        is AppState.Loaded -> UsersList((appState as AppState.Loaded).users, navigateDetailsScreen)
+        is AppState.Loaded -> UsersList((appState as AppState.Loaded).users) { user ->
+            viewModel.storeUser(user)
+            navigateDetailsScreen(user)
+        }
+
         is AppState.Loading -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()

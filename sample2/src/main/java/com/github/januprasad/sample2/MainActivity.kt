@@ -47,16 +47,14 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
 
                     val navController = rememberNavController()
+                    val usersVM: UsersVM = hiltViewModel()
                     Column(Modifier.padding(innerPadding)) {
-
                         NavHost(
                             navController = navController,
                             startDestination = Screens.UsersListScreen.toString()
                         ) {
                             composable(Screens.UsersListScreen.toString()) {
-                                val viewModel: UsersVM = hiltViewModel()
-                                UsersScreen(viewModel = viewModel) {
-                                    viewModel.storeUser(it)
+                                UsersScreen(usersVM) {
                                     navController.navigate(Screens.UsersDetailScreen.toString())
                                 }
                             }
