@@ -31,6 +31,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.januprasad.sample.ui.theme.DrinkwaterReminderTheme
 import com.github.januprasad.sample.viewmodel.UiState
 import com.github.januprasad.sample.viewmodel.UsersVM
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -52,6 +57,15 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding)
                     ) {
                         UsersScreen()
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            println("A")
+                            launch {
+                                delay(4000L)
+                                println("B")
+                            }
+                            println("C")
+                        }
                     }
                 }
             }
@@ -65,7 +79,7 @@ fun UsersScreen(viewmodel: UsersVM = viewModel()) {
     LaunchedEffect(true) {
         viewmodel.getUsers()
     }
-    val uiState:State<UiState> = viewmodel.usersState.collectAsState()
+    val uiState: State<UiState> = viewmodel.usersState.collectAsState()
     when (uiState.value) {
         is UiState.Done -> {
             val users = (uiState.value as UiState.Done).users

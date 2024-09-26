@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,9 +29,11 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -45,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -54,6 +58,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.januprasad.drinkwater.domain.model.Reminder
 import com.github.januprasad.drinkwater.presentation.MainViewModel
 import com.github.januprasad.drinkwater.ui.theme.DrinkwaterReminderTheme
+import com.github.januprasad.drinkwater.ui.theme.warning
 import com.github.januprasad.drinkwater.util.cancelAlarm
 import com.github.januprasad.drinkwater.util.setUpAlarm
 import com.github.januprasad.drinkwater.util.setUpPeriodicAlarm
@@ -137,28 +142,36 @@ fun MainScreen(viewModel: MainViewModel) {
 
             if (isTimePickerVisible.value) {
                 Dialog(onDismissRequest = { /*TODO*/ }) {
-                    Column {
+                    Box(modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(
+                            color = MaterialTheme.colorScheme.warning
+                        )
+                        .padding(10.dp)
+                    ) {
+                        Column {
 
-                        TimePicker(state = timePickerState)
-                        Row {
-                            Button(onClick = {
-                                isTimePickerVisible.value = isTimePickerVisible.value.not()
-                            }) {
-                                Text(text = "Cancel")
-                            }
-
-                            Button(onClick = {
-                                val calendar = Calendar.getInstance().apply {
-                                    set(Calendar.HOUR_OF_DAY, timePickerState.hour)
-                                    set(Calendar.MINUTE, timePickerState.minute)
+                            TimePicker(state = timePickerState)
+                            Row {
+                                Button(onClick = {
+                                    isTimePickerVisible.value = isTimePickerVisible.value.not()
+                                }) {
+                                    Text(text = "Cancel")
                                 }
-                                timeInMillis.value = calendar.timeInMillis
-                                isTimePickerVisible.value = false
-                            }) {
-                                Text(text = "Confirm")
-                            }
-                        }
 
+                                Button(onClick = {
+                                    val calendar = Calendar.getInstance().apply {
+                                        set(Calendar.HOUR_OF_DAY, timePickerState.hour)
+                                        set(Calendar.MINUTE, timePickerState.minute)
+                                    }
+                                    timeInMillis.value = calendar.timeInMillis
+                                    isTimePickerVisible.value = false
+                                }) {
+                                    Text(text = "Confirm")
+                                }
+                            }
+
+                        }
                     }
                 }
             }
